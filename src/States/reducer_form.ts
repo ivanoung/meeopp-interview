@@ -1,5 +1,7 @@
 import {
-    GET_FORM,
+    // GET_FORM,
+    GET_FORM_SUCCESSFUL,
+    // GET_FORM_FAILED,
     // UPDATE_FORM,
     UPDATE_NAME,
     POST_FORM,
@@ -21,12 +23,12 @@ export interface IFormState {
 }
 
 const initialState = {
-    firstName: "Enter your first name here",
-    lastName: "Oung",
-    company: "Hi",
-    department: "Ok",
-    position: "Right",
-    email: "I@io.io"
+    firstName: "",
+    lastName: "",
+    company: "",
+    department: "",
+    position: "",
+    email: ""
 };
 
 export const formReducer = (
@@ -34,7 +36,7 @@ export const formReducer = (
     action: FormAction
 ): IFormState => {
     switch (action.type) {
-        case GET_FORM: {
+        case GET_FORM_SUCCESSFUL: {
             return { ...state, ...action.form };
         }
         case UPDATE_NAME: {

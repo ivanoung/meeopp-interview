@@ -1,14 +1,13 @@
 import { Action, Dispatch } from "redux";
 import axios from "axios";
 import { IFormState } from "./reducer_form";
-import database from "../Config/fbConfig";
-import { ThunkResult } from "./store";
-import firebase from "../Config/fbConfig";
+// import database from "../Config/fbConfig";
+
 /* ===== ===== ===== ===== ===== ===== ===== ===== ===== */
-export const GET_FORM = "GET_FORM";
-export type GET_FORM = typeof GET_FORM;
-export interface IGetFormAction extends Action {
-    type: GET_FORM;
+export const GET_FORM_SUCCESSFUL = "GET_FORM_SUCCESSFUL";
+export type GET_FORM_SUCCESSFUL = typeof GET_FORM_SUCCESSFUL;
+export interface IGetFormSuccessfulAction extends Action {
+    type: GET_FORM_SUCCESSFUL;
     form: IFormState;
 }
 
@@ -66,7 +65,7 @@ export interface IPostFormAction extends Action {
 /* ===== ===== ===== ===== ===== ===== ===== ===== ===== */
 
 export type FormAction =
-    | IGetFormAction
+    | IGetFormSuccessfulAction
     | IUpdateFormAction
     | IUpdateNameAction
     | IUpdateLastAction
@@ -77,9 +76,46 @@ export type FormAction =
     | IPostFormAction;
 
 /* ===== ===== ===== ===== ===== ===== ===== ===== ===== */
-export function getForm(form: IFormState): IGetFormAction {
+// import db from "../Config/fbConfig";
+import { db } from "../States/store";
+
+export function getForm() {
+    return (dispatch: Dispatch<IGetFormSuccessfulAction>) => {
+        db.collection("formData")
+            .doc("cDRbAixBPxuNtrEkHKVi")
+            .get()
+            .then(result => {
+                const theState = { ...result["_document"]["proto"]["fields"] };
+                console.log(theState);
+                const formResult: IFormState = {
+                    firstName: theState.firstName.stringValue,
+                    lastName: theState.lastName.stringValue,
+                    company: theState.company.stringValue,
+                    department: theState.department.stringValue,
+                    position: theState.position.stringValue,
+                    email: theState.email.stringValue
+                };
+
+                dispatch(getFormSuccessful(formResult));
+                console.log(result);
+            });
+    };
+}
+
+export function postForm(form: IFormState) {
+    return () => {
+        db.collection("formData")
+            .doc("cDRbAixBPxuNtrEkHKVi")
+            .update({ ...form })
+            .then(() => {
+                console.log("good job");
+            });
+    };
+}
+
+export function getFormSuccessful(form: IFormState): IGetFormSuccessfulAction {
     return {
-        type: GET_FORM,
+        type: GET_FORM_SUCCESSFUL,
         form
     };
 }
@@ -131,74 +167,3 @@ export function submitForm(): IPostFormAction {
         type: POST_FORM
     };
 }
-
-export function getDataFromFirebase(): ThunkResult<void> {
-    return async (dispatch: Dispatch<FormAction>) => {
-        return firebase.auth().onAuthStateChanged(async user => {
-            console.log("hi", user);
-            if (user) {
-                const result = await axios.get(
-                    "https://meeopp-interview.firebaseio.com/users/" +
-                        user.uid +
-                        ".json?auth=IC5vnzNv89Z59K5oBj13e9GXo8QyZzHQCSidIQWi"
-                );
-
-                if (result) {
-                    // dispatch(getForm({}));
-                } else {
-                    // dispatch(getFormFailure());
-                }
-            }
-        });
-    };
-}
-
-/* ===== ===== ===== ===== ===== ===== ===== ===== ===== */
-// export function localLoginSuccess(
-//     userInfoPackage: any
-// ): ILocalLoginSuccessAction {
-//     return {
-//         type: LOCAL_LOGIN_SUCCESS,
-//         userInfoPackage
-//     };
-// }
-
-// export function localLoginFail(errMsg: string): ILocalLoginFailAction {
-//     return {
-//         type: LOCAL_LOGIN_FAIL,
-//         errMsg
-//     };
-// }
-
-// export function localLogin(username: string, password: string) {
-//     return (
-//         dispatch: Dispatch<ILocalLoginSuccessAction | ILocalLoginFailAction>
-//     ) => {
-//         const loginPackage: ILoginPackage = {
-//             username,
-//             password
-//         };
-
-//         axios
-//             .post(`${API_SERVER}/api/auth/login`, loginPackage)
-//             .then((res: any) => {
-//                 if (res.status === 200) {
-//                     dispatch(localLoginSuccess(res.data));
-//                 } else {
-//                     dispatch(localLoginFail(res.status));
-//                     throw new Error("Login failed, please try again.");
-//                 }
-//             })
-//             .catch((err: any) => {
-//                 dispatch(localLoginFail(err.response.data || err));
-//                 AppToaster.show({
-//                     message: "Error, try again\n" + err.response.data || err,
-//                     intent: Intent.WARNING,
-//                     icon: "cross",
-//                     timeout: 2000
-//                 });
-//             });
-//     };
-// }
-
-/* ===== ===== ===== ===== ===== ===== ===== ===== ===== */

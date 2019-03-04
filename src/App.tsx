@@ -12,8 +12,9 @@ import {
     updatePosition,
     updateEmail,
     getForm,
-    getDataFromFirebase
+    postForm
 } from "./States/actions_form";
+import { IFormState } from "./States/reducer_form";
 
 interface IFormProps {
     firstName: string;
@@ -29,6 +30,7 @@ interface IFormProps {
     updatePosition: (position: string) => void;
     updateEmail: (email: string) => void;
     getForm: () => void;
+    postForm: (form: IFormState) => void;
 }
 
 // Redux
@@ -46,7 +48,7 @@ const mapStateToProps = (state: IRootState) => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         getForm: () => {
-            dispatch(getDataFromFirebase());
+            dispatch(getForm());
         },
         updateName: (firstName: string) => {
             dispatch(updateName(firstName));
@@ -65,10 +67,10 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         updateEmail: (email: string) => {
             dispatch(updateEmail(email));
+        },
+        postForm: (form: IFormState) => {
+            dispatch(postForm(form));
         }
-        // submitForm: () => {
-        //     dispatch(submitForm());
-        // }
     };
 };
 
@@ -107,6 +109,18 @@ class PureApp extends React.Component<IFormProps> {
     componentDidMount() {
         this.props.getForm();
     }
+
+    public submitFormAction = () => {
+        let formData = {
+            firstName: this.props.firstName,
+            lastName: this.props.lastName,
+            company: this.props.company,
+            department: this.props.department,
+            position: this.props.position,
+            email: this.props.email
+        };
+        this.props.postForm({ ...formData });
+    };
 
     render() {
         return (
@@ -178,7 +192,7 @@ class PureApp extends React.Component<IFormProps> {
                             <button
                                 type="submit"
                                 className="btn btn-primary"
-                                // onClick={}
+                                onClick={this.submitFormAction}
                             >
                                 Submit
                             </button>

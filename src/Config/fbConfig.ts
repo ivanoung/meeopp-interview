@@ -12,5 +12,17 @@ const config = {
     storageBucket: "meeopp-interview.appspot.com",
     messagingSenderId: "36017066191"
 };
+
+export const rrfConfig = {
+    userProfile: "users"
+    // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+};
+
+// const db = firebase.initializeApp(config);
 // firebase.firestore().settings({ timestampsInSnapshots: true });
-export default firebase.initializeApp(config);
+// const app = firebase.initializeApp(config);
+// const db = firebase.firestore(app);
+
+// const databaseRef = firebase.database().ref();
+// export const formDataRef = databaseRef.child("formData");
+// export default db;
