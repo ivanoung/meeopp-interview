@@ -110,7 +110,8 @@ class PureApp extends React.Component<IFormProps> {
         this.props.getForm();
     }
 
-    public submitFormAction = () => {
+    public submitFormAction = e => {
+        e.preventDefault();
         let formData = {
             firstName: this.props.firstName,
             lastName: this.props.lastName,

@@ -12,7 +12,6 @@ import { formReducer, IFormState } from "./reducer_form";
 // Importing Firebase
 import { reduxFirestore, getFirestore } from "redux-firestore";
 import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
-// import fbConfig, { rrfConfig } from "../Config/fbConfig";
 
 import firebase from "firebase/app";
 import "firebase/firebase-firestore";
@@ -31,7 +30,6 @@ const config = {
 
 export const rrfConfig = {
     userProfile: "users"
-    // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
 };
 
 const fbInstant = firebase.initializeApp(config);
@@ -46,10 +44,6 @@ export const rootReducer = combineReducers<IRootState>({
 
 // redux-logger
 import logger from "redux-logger";
-
-// export type ThunkResult<R> = ThunkAction<R, IRootState, null, FormAction>;
-
-// export type ThunkDispatch = ThunkDispatch<IRootState, null, FormAction>;
 
 // redux-dev-tools
 declare global {

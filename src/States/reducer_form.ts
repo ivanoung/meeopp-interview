@@ -1,8 +1,5 @@
 import {
-    // GET_FORM,
     GET_FORM_SUCCESSFUL,
-    // GET_FORM_FAILED,
-    // UPDATE_FORM,
     UPDATE_NAME,
     POST_FORM,
     FormAction,

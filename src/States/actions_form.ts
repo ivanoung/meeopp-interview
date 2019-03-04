@@ -1,7 +1,6 @@
 import { Action, Dispatch } from "redux";
-import axios from "axios";
 import { IFormState } from "./reducer_form";
-// import database from "../Config/fbConfig";
+import { db } from "../States/store";
 
 /* ===== ===== ===== ===== ===== ===== ===== ===== ===== */
 export const GET_FORM_SUCCESSFUL = "GET_FORM_SUCCESSFUL";
@@ -76,9 +75,8 @@ export type FormAction =
     | IPostFormAction;
 
 /* ===== ===== ===== ===== ===== ===== ===== ===== ===== */
-// import db from "../Config/fbConfig";
-import { db } from "../States/store";
 
+// Retriving data from DB
 export function getForm() {
     return (dispatch: Dispatch<IGetFormSuccessfulAction>) => {
         db.collection("formData")
@@ -102,6 +100,7 @@ export function getForm() {
     };
 }
 
+// Updating form information to DB
 export function postForm(form: IFormState) {
     return () => {
         db.collection("formData")
